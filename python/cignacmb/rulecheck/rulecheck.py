@@ -26,6 +26,7 @@ RuleSheetIndex = 1 						# 规则用例在第二张sheet
 RuleSheetTitleIndex = 0 				# 表头所在行
 
 RuleCaseXlsxTemplate = 'rulecase.xlsx' 	# 初始化显示用，为空文件，主要是为定义显示的表头
+RuleCaseXlsxContentCol = 4 				# 规则内容列：E列
 RuleCaseXlsxParasCol = 6 				# 规则校验参数列：G列
 ProductConfigFile = 'product.ini' 		# 各产品的配置文件名
 ProductConfigBaseTag = 'base' 			# 产品基础配置标签
@@ -62,7 +63,6 @@ class RuleCheckMainFrame(wx.Frame):
 		self.rulesGridPanel = wx.Panel(self, -1, size=(300,300))
 
 		requestXMLPanel = wx.Panel(self, -1)
-		sendWsButton = wx.Button(self, -1, u"发送报文") # 调用webservice，发送请求报文
 		responseXMLPanel = wx.Panel(self, -1)
 
 		# 产品树+（规则+报文）
@@ -74,7 +74,6 @@ class RuleCheckMainFrame(wx.Frame):
 
 		xmlhBox = wx.BoxSizer(wx.HORIZONTAL)
 		xmlhBox.Add(requestXMLPanel, proportion=1, flag=wx.EXPAND, border=10)
-		xmlhBox.Add(sendWsButton, proportion=0, flag=wx.ALL, border=10)
 		xmlhBox.Add(responseXMLPanel, proportion=1, flag=wx.EXPAND, border=10)
 
 		vbox.Add(xmlhBox, proportion=8, flag=wx.EXPAND, border=10)
@@ -87,8 +86,6 @@ class RuleCheckMainFrame(wx.Frame):
 		self.InitRulesGrid(self.rulesGridPanel)
 		self.InitRequestXMLPanel(requestXMLPanel)
 		self.InitResponseXMLPanel(responseXMLPanel)
-
-		self.Bind(wx.EVT_BUTTON, self.OnSendWsButtonClick, sendWsButton)
 
 		# 创建状态栏
 		statusBar = self.CreateStatusBar()
@@ -103,27 +100,33 @@ class RuleCheckMainFrame(wx.Frame):
 
 	def InitMenu(self):
 		menuBar = wx.MenuBar()
+
 		menu1 = wx.Menu()
 		menuBar.Append(menu1, "&File")
+		exitMenuItem = menu1.Append(wx.NewId(), "&Exit...", u"退出系统")
+		self.Bind(wx.EVT_MENU, self.OnCloseWindow, exitMenuItem)
 
-		menu2 = wx.Menu()
-		menuBar.Append(menu2, "&Edit")
+		menuTools = wx.Menu()
+		menuBar.Append(menuTools, "&Tools")
+		refreshProductMenuItem = menuTools.Append(wx.NewId(), u"刷新产品", u"刷新产品列表")
+		refreshRuleMenuItem = menuTools.Append(wx.NewId(), u"刷新规则", u"刷新规则列表")
+		self.Bind(wx.EVT_MENU, self.OnRefreshProductClick, refreshProductMenuItem)
+		self.Bind(wx.EVT_MENU, self.OnRefreshRuleClick, refreshRuleMenuItem)
 
 		menuHelp = wx.Menu()
 		menuBar.Append(menuHelp, "&Help")
+		menuHelp.AppendSeparator()
+		aboutMenuItem = menuHelp.Append(wx.NewId(), u"&About...", u"关于工具说明")
+		#self.Bind(wx.EVT_MENU, self.OnAboutMenuClick, aboutMenuItem)
+
 		self.SetMenuBar(menuBar)
 
 	def InitProductTree(self, parent):
 		self.productTree = wx.TreeCtrl(parent)
-		root = self.productTree.AddRoot(u"产品")
 
-		files = os.listdir(dir)
-		files.sort(reverse=True)
-		for f in files:
-			self.productTree.AppendItem(root, f)
-
-		self.productTree.Expand(root) # Expand the first level
-		self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnProudctTreeActivated, self.productTree)
+		self.OnRefreshProductClick(None)
+		#self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnProudctTreeActivated, self.productTree)
+		self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnProudctTreeActivated, self.productTree)
 
 		vbox = wx.BoxSizer(orient=wx.VERTICAL)
 		vbox.Add(self.productTree, proportion=1, flag=wx.EXPAND, border=0)
@@ -135,9 +138,10 @@ class RuleCheckMainFrame(wx.Frame):
 		self.ruleGrid = wx.grid.Grid(parent)
 		self.LoadGridTable(RuleCaseXlsxTemplate) 		# 加载空文件（rulecase.xlsx），显示表头
 
-		self.ruleGrid.SetDefaultCellOverflow(True)
+		#self.ruleGrid.SetDefaultCellOverflow(True)
+		#self.ruleGrid.Bind(wx.grid.EVT_GRID_CELL_LEFT_DCLICK, self.OnRuleGridLEFTDCLICK)
+		self.ruleGrid.Bind(wx.grid.EVT_GRID_CELL_LEFT_CLICK, self.OnRuleGridLEFTDCLICK)
 		self.ruleGrid.SetSelectionMode(wx.grid.Grid.SelectRows) # 一次选择整行
-		self.ruleGrid.Bind(wx.grid.EVT_GRID_CELL_LEFT_DCLICK, self.OnRuleGridLEFTDCLICK)
 
 		vbox = wx.BoxSizer(orient=wx.VERTICAL)
 		vbox.Add(self.ruleGridTitle, proportion=0, flag=wx.EXPAND, border=0)
@@ -145,22 +149,70 @@ class RuleCheckMainFrame(wx.Frame):
 		parent.SetSizer(vbox)
 
 	def InitRequestXMLPanel(self, parent):
+		ruleLabel = wx.StaticText(parent, -1, u"准备验证的规则：")
+		self.ruleContentStaticText = wx.StaticText(parent, -1, u"", style=(wx.TE_MULTILINE))
+
 		requestXMlLabel = wx.StaticText(parent, -1, u"请求报文：")
 		self.requestXMlText = wx.TextCtrl(parent, -1, value='', style=(wx.TE_MULTILINE | wx.TE_AUTO_SCROLL | wx.TE_DONTWRAP))
 
 		vbox = wx.BoxSizer(orient=wx.VERTICAL)
+		vbox.Add(ruleLabel, proportion=0, flag=wx.EXPAND, border=0)
+		vbox.Add(self.ruleContentStaticText, proportion=0, flag=wx.EXPAND, border=0)
+
+		vbox.Add(wx.StaticText(parent, -1, u""), proportion=0, flag=wx.EXPAND, border=0)
+
 		vbox.Add(requestXMlLabel, proportion=0, flag=wx.EXPAND, border=0)
 		vbox.Add(self.requestXMlText, proportion=1, flag=wx.EXPAND, border=0)
 		parent.SetSizer(vbox)
 
 	def InitResponseXMLPanel(self, parent):
-		responseXMlLabel = wx.StaticText(parent, -1, u"返回报文：")
+		sendWsButton = wx.Button(parent, -1, u"发送报文") # 调用webservice，发送请求报文
+
+		responseXMlLabel = wx.StaticText(parent, -1, u"返回结果：")
 		self.responseXMlText = wx.TextCtrl(parent, -1, value='')
 
 		vbox = wx.BoxSizer(orient=wx.VERTICAL)
+		vbox.Add(sendWsButton, proportion=0, flag=wx.EXPAND, border=0)
+		vbox.Add(wx.StaticText(parent, -1, u""), proportion=0, flag=wx.EXPAND, border=0)
 		vbox.Add(responseXMlLabel, proportion=0, flag=wx.EXPAND, border=0)
 		vbox.Add(self.responseXMlText, proportion=1, flag=wx.EXPAND, border=0)
 		parent.SetSizer(vbox)
+
+		self.Bind(wx.EVT_BUTTON, self.OnSendWsButtonClick, sendWsButton)
+
+	def OnCloseWindow(self, evt):
+		'退出系统'
+		self.Destroy()
+
+	def OnRefreshProductClick(self, evt):
+		self.productTree.DeleteAllItems()
+		root = self.productTree.AddRoot(u"产品")
+
+		files = os.listdir(dir)
+		files.sort(reverse=True)
+		for f in files:
+			self.productTree.AppendItem(root, f)
+		self.productTree.Expand(root) # Expand the first level
+		if evt != None:
+			self.ClearComponentText()
+
+	def OnRefreshRuleClick(self, evt):
+		'刷新规则列表'
+		if self.ruleGridTitle.GetLabel() == '':
+			return
+		productIniPath = dir + os.sep + self.ruleGridTitle.GetLabel() + os.sep + ProductConfigFile
+		cf = self.GetProductIniParser(productIniPath)
+		ruleXlsxFileName = cf.get(ProductConfigBaseTag, 'rulecase.xlsx')
+		ruleXlsxFile = dir + os.sep + self.ruleGridTitle.GetLabel() + os.sep + ruleXlsxFileName
+		self.LoadGridTable(ruleXlsxFile)
+
+		self.ruleContentStaticText.SetLabel('')
+		self.requestXMlText.SetValue('')
+		self.responseXMlText.SetValue('')
+
+	def OnAboutMenuClick(self, evt):
+		'打开工具介绍对话框'
+		HelpAboutDialog().ShowModal()
 
 	def OnProudctTreeActivated(self, evt):
 		'产品树双击事件'
@@ -193,6 +245,7 @@ class RuleCheckMainFrame(wx.Frame):
 		self.ruleGridTitle.SetLabel('')
 		# 表格
 		self.LoadGridTable(RuleCaseXlsxTemplate)
+		self.ruleContentStaticText.SetLabel('')
 		self.requestXMlText.SetValue('')
 		self.responseXMlText.SetValue('')
 
@@ -221,6 +274,9 @@ class RuleCheckMainFrame(wx.Frame):
 		self.ruleGrid.AutoSize() # 自动调整整个网格尺寸：http://blog.sina.com.cn/s/blog_56146dc501009jir.html
 
 	def OnRuleGridLEFTDCLICK(self, evt):
+		# 显示正在操作的规则内容，E列（4）
+		self.ruleContentStaticText.SetLabel(self.ruleGrid.GetCellValue(evt.GetRow(), RuleCaseXlsxContentCol))
+
 		productIniPath = dir + os.sep + self.ruleGridTitle.GetLabel() + os.sep + ProductConfigFile # product.ini配置文件
 		cf = self.GetProductIniParser(productIniPath)
 
@@ -259,7 +315,14 @@ class RuleCheckMainFrame(wx.Frame):
 	def OnSendWsButtonClick(self, evt):
 		'调用webservice，发送请求报文'
 		request = self.requestXMlText.GetValue()
-		print 'send request xml ...', request
+		if request == '':
+			wx.MessageBox(u"请求报文不能为空", caption=u"警告", style=wx.OK|wx.ICON_ERROR)
+			return
+		try:
+			Etree.fromstring(request)
+		except Exception,e:
+			wx.MessageBox(u"请求报文格式有误", caption=u"警告", style=wx.OK|wx.ICON_ERROR)
+			return
 
 		progressMax = 25
 		dialog = wx.ProgressDialog(u'规则验证', u'正在发送请求验证规则，请稍候...', progressMax, parent=None, style=wx.PD_AUTO_HIDE | wx.PD_APP_MODAL)
@@ -274,15 +337,19 @@ class RuleCheckMainFrame(wx.Frame):
 		imp = Import('http://www.w3.org/2001/XMLSchema')
 		'''
 
-		imp.filter.add(tns)
-		client = Client(url, plugins=[ImportDoctor(imp)])
-		response = (client.service.getWeather('58367'))
+		response = ''
+		try:
+			imp.filter.add(tns)
+			client = Client(url, plugins=[ImportDoctor(imp)])
+			response = (client.service.getWeather('58367'))
+		except Exception,e:
+			response = e
+		finally:
+			self.responseXMlText.SetValue(unicode(response))
+			thread.stop()
+			dialog.Destroy()
+			print response
 
-		self.responseXMlText.SetValue(unicode(response))
-
-		thread.stop()
-		dialog.Destroy()
-		print response
 
 class GenericTable(wx.grid.PyGridTableBase):
 	def __init__(self, data, rowLabels=None, colLabels=None):
@@ -331,11 +398,16 @@ class ProgressThread(threading.Thread):
 			count = count + 1
 			# 超过时从头开始
 			if count >= self.maximum:
-				count = 0
+				count = 1
 			self.progressDialog.Update(count)
 
 	def stop(self):
 		self.timeToQuit.set()
+
+class HelpAboutDialog(wx.Dialog):
+	def __init__(self):
+		# wx.MessageBox(u"请求报文不能为空", caption=u"警告", style=wx.OK|wx.ICON_ERROR)
+		wx.Dialog.__init__(self, None, -1, u'规则验证工具',size=(300, 100))
 
 if __name__ == '__main__':
 	print 'start ...'
