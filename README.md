@@ -1,2 +1,2 @@
 # chipcode
-Collect chip code
+Collect chip code about go, python, vba etc.
