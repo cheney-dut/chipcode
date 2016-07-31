@@ -13,4 +13,4 @@ for /R %%s in (*.exe) do (
 
 :_EXIT
 
-REM pause
+pause
