@@ -34,6 +34,13 @@ func edituser(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "edit a user", uid, "success!")
 }
 
+/*
+启动后访问示例：
+http://127.0.0.1:8088/user/song
+http://127.0.0.1:8088/user/song/32
+http://127.0.0.1:8088/user/song
+可用Poster插件发送post请求
+*/
 func main() {
 	fmt.Println("正在启动WEB服务...")
 	var mux *routes.RouteMux = routes.New()
