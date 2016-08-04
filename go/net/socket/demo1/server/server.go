@@ -9,6 +9,11 @@ import (
 )
 
 func handleConnection(conn net.Conn) {
+	defer conn.Close()
+
+	fmt.Printf("accepted !\n")
+	fmt.Printf("%s\n", conn.LocalAddr().String())
+
 	data, err := bufio.NewReader(conn).ReadString('\n')
 	if err != nil {
 		log.Fatal("get client data error:", err)
@@ -19,7 +24,7 @@ func handleConnection(conn net.Conn) {
 }
 
 func main() {
-	ln, err := net.Listen("tcp", "127.0.0.1:6010")
+	ln, err := net.Listen("tcp", ":6010")
 	if err != nil {
 		panic(err)
 	}
