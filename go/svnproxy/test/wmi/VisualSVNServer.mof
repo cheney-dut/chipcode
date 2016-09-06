@@ -1,0 +1,831 @@
+
+#pragma classflags("forceupdate")
+
+#pragma namespace ("\\\\.\\root")
+
+[guid("{D5E2BB03-081A-4286-AA46-2AA83573A932}")
+ ,NamespaceSecuritySDDL("D:(A;CI;CCDCWP;;;S-1-5-21-1336596058-638747241-148348329-1004)")]
+instance of __NameSpace
+{
+    Name = "VisualSVN";
+};
+
+#pragma namespace ("\\\\.\\root\\VisualSVN")
+
+instance of __Win32Provider as $P
+{
+    Name    = "VisualSVNWMIProvider";
+    ClsId   = "{3E7CF778-9DCE-4D0F-A71D-B77FB0FB5E39}";
+    ImpersonationLevel = 1;
+    PerUserInitialization = TRUE;
+    HostingModel = "NetworkServiceHost:VisualSVN-3.5.4";
+    Version = 1;
+};
+
+instance of __InstanceProviderRegistration
+{
+    Provider = $P;
+
+    SupportsPut = TRUE;
+    SupportsGet = TRUE;
+    SupportsDelete = TRUE;
+    SupportsEnumeration = TRUE;
+};
+
+instance of __MethodProviderRegistration
+{
+    Provider = $P;
+};
+
+[Version("2.22.1") : Amended, Description("CIM_Error is a specialized class that contains information about the severity, cause, recommended actions and other data related to the failure of a CIM Operation. Instances of this type MAY be included as part of the response to a CIM Operation.") : Amended ToSubclass, AMENDMENT, LOCALE("MS_409")]
+class CIM_Error
+{
+    [Description("Primary classification of the error. The following values are defined: \n2 - Communications Error. Errors of this type are principally associated with the procedures and/or processes required to convey information from one point to another. \n3 - Quality of Service Error. Errors of this type are principally associated with failures that result in reduced functionality or performance. \n4 - Software Error. Error of this type are principally associated with a software or processing fault. \n5 - Hardware Error. Errors of this type are principally associated with an equipment or hardware failure. \n6 - Environmental Error. Errors of this type are principally associated with a failure condition relating the to facility, or other environmental considerations. \n7 - Security Error. Errors of this type are associated with security violations, detection of viruses, and similar issues. \n8 - Oversubscription Error. Errors of this type are principally associated with the failure to allocate sufficient resources to complete the operation. \n9 - Unavailable Resource Error. Errors of this type are principally associated with the failure to access a required resource. \n10 -Unsupported Operation Error. Errors of this type are principally associated with requests that are not supported.") : Amended ToSubclass,Values{"Unknown", "Other", "Communications Error", "Quality of Service Error", "Software Error", "Hardware Error", "Environmental Error", "Security Error", "Oversubscription Error", "Unavailable Resource Error", "Unsupported Operation Error", "DMTF Reserved"} : Amended ToSubclass] uint16 ErrorType;
+    [Description("A free-form string describing the ErrorType when 1, \"Other\", is specified as the ErrorType.") : Amended ToSubclass] string OtherErrorType;
+    [Description("A string that uniquely identifies the entity that owns the definition of the format of the Message described in this instance. OwningEntity must include a copyrighted, trademarked or otherwise unique name that is owned by the business entity or standards body defining the format.") : Amended ToSubclass] string OwningEntity;
+    [Description("An opaque string that uniquely identifies, within the scope of the OwningEntity, the format of the Message.") : Amended ToSubclass] string MessageID;
+    [Description("The formatted message. This message is constructed by combining some or all of the dynamic elements specified in the MessageArguments property with the static elements uniquely identified by the MessageID in a message registry or other catalog associated with the OwningEntity.") : Amended ToSubclass] string Message;
+    [Description("An array containing the dynamic content of the message.") : Amended ToSubclass] string MessageArguments[];
+    [Description("An enumerated value that describes the severity of the Indication from the notifier\\'s point of view: \n0 - the Perceived Severity of the indication is unknown or indeterminate. \n1 - Other, by CIM convention, is used to indicate that the Severity\\'s value can be found in the OtherSeverity property. \n2 - Information should be used when providing an informative response. \n3 - Degraded/Warning should be used when its appropriate to let the user decide if action is needed. \n4 - Minor should be used to indicate action is needed, but the situation is not serious at this time. \n5 - Major should be used to indicate action is needed NOW. \n6 - Critical should be used to indicate action is needed NOW and the scope is broad (perhaps an imminent outage to a critical resource will result). \n7 - Fatal/NonRecoverable should be used to indicate an error occurred, but it\\'s too late to take remedial action. \n2 and 0 - Information and Unknown (respectively) follow common usage. Literally, the Error is purely informational or its severity is simply unknown.") : Amended ToSubclass,Values{"Unknown", "Other", "Information", "Degraded/Warning", "Minor", "Major", "Critical", "Fatal/NonRecoverable", "DMTF Reserved"} : Amended ToSubclass] uint16 PerceivedSeverity;
+    [Description("An enumerated value that describes the probable cause of the error.") : Amended ToSubclass,Values{"Unknown", "Other", "Adapter/Card Error", "Application Subsystem Failure", "Bandwidth Reduced", "Connection Establishment Error", "Communications Protocol Error", "Communications Subsystem Failure", "Configuration/Customization Error", "Congestion", "Corrupt Data", "CPU Cycles Limit Exceeded", "Dataset/Modem Error", "Degraded Signal", "DTE-DCE Interface Error", "Enclosure Door Open", "Equipment Malfunction", "Excessive Vibration", "File Format Error", "Fire Detected", "Flood Detected", "Framing Error", "HVAC Problem", "Humidity Unacceptable", "I/O Device Error", "Input Device Error", "LAN Error", "Non-Toxic Leak Detected", "Local Node Transmission Error", "Loss of Frame", "Loss of Signal", "Material Supply Exhausted", "Multiplexer Problem", "Out of Memory", "Output Device Error", "Performance Degraded", "Power Problem", "Pressure Unacceptable", "Processor Problem (Internal Machine Error)", "Pump Failure", "Queue Size Exceeded", "Receive Failure", "Receiver Failure", "Remote Node Transmission Error", "Resource at or Nearing Capacity", "Response Time Excessive", "Retransmission Rate Excessive", "Software Error", "Software Program Abnormally Terminated", "Software Program Error (Incorrect Results)", "Storage Capacity Problem", "Temperature Unacceptable", "Threshold Crossed", "Timing Problem", "Toxic Leak Detected", "Transmit Failure", "Transmitter Failure", "Underlying Resource Unavailable", "Version Mismatch", "Previous Alert Cleared", "Login Attempts Failed", "Software Virus Detected", "Hardware Security Breached", "Denial of Service Detected", "Security Credential Mismatch", "Unauthorized Access", "Alarm Received", "Loss of Pointer", "Payload Mismatch", "Transmission Error", "Excessive Error Rate", "Trace Problem", "Element Unavailable", "Element Missing", "Loss of Multi Frame", "Broadcast Channel Failure", "Invalid Message Received", "Routing Failure", "Backplane Failure", "Identifier Duplication", "Protection Path Failure", "Sync Loss or Mismatch", "Terminal Problem", "Real Time Clock Failure", "Antenna Failure", "Battery Charging Failure", "Disk Failure", "Frequency Hopping Failure", "Loss of Redundancy", "Power Supply Failure", "Signal Quality Problem", "Battery Discharging", "Battery Failure", "Commercial Power Problem", "Fan Failure", "Engine Failure", "Sensor Failure", "Fuse Failure", "Generator Failure", "Low Battery", "Low Fuel", "Low Water", "Explosive Gas", "High Winds", "Ice Buildup", "Smoke", "Memory Mismatch", "Out of CPU Cycles", "Software Environment Problem", "Software Download Failure", "Element Reinitialized", "Timeout", "Logging Problems", "Leak Detected", "Protection Mechanism Failure", "Protecting Resource Failure", "Database Inconsistency", "Authentication Failure", "Breach of Confidentiality", "Cable Tamper", "Delayed Information", "Duplicate Information", "Information Missing", "Information Modification", "Information Out of Sequence", "Key Expired", "Non-Repudiation Failure", "Out of Hours Activity", "Out of Service", "Procedural Error", "Unexpected Information", "DMTF Reserved"} : Amended ToSubclass] uint16 ProbableCause;
+    [Description("A free-form string describing the probable cause of the error.") : Amended ToSubclass] string ProbableCauseDescription;
+    [Description("A free-form string describing recommended actions to take to resolve the error.") : Amended ToSubclass] string RecommendedActions[];
+    [Description("The identifying information of the entity (i.e., the instance) generating the error. If this entity is modeled in the CIM Schema, this property contains the path of the instance encoded as a string parameter. If not modeled, the property contains some identifying string that names the entity that generated the error. The path or identifying string is formatted per the ErrorSourceFormat property.") : Amended ToSubclass] string ErrorSource;
+    [Description("The format of the ErrorSource property is interpretable based on the value of this property. Values are defined as: \n0 - Unknown. The format is unknown or not meaningfully interpretable by a CIM client application. \n1 - Other. The format is defined by the value of the OtherErrorSourceFormat property.2 - CIMObjectPath. A CIM Object Path as defined in the CIM Infrastructure specification. Note: CIM 2.5 and earlier used the term object names.") : Amended ToSubclass,Values{"Unknown", "Other", "CIMObjectPath", "DMTF Reserved"} : Amended ToSubclass] uint16 ErrorSourceFormat;
+    [Description("A string defining \"Other\" values for ErrorSourceFormat. This value MUST be set to a non NULL value when ErrorSourceFormat is set to a value of 1 (\"Other\"). For all other values of ErrorSourceFormat, the value of this string must be set to NULL.") : Amended ToSubclass] string OtherErrorSourceFormat;
+    [Description("The CIM status code that characterizes this instance. \nThis property defines the status codes that MAY be return by a conforming CIM Server or Listener. Note that not all status codes are valid for each operation. The specification for each operation SHOULD define the status codes that may be returned by that operation. \nThe following values for CIM status code are defined: \n1 - CIM_ERR_FAILED. A general error occurred that is not covered by a more specific error code. \n2 - CIM_ERR_ACCESS_DENIED. Access to a CIM resource was not available to the client. \n3 - CIM_ERR_INVALID_NAMESPACE. The target namespace does not exist. \n4 - CIM_ERR_INVALID_PARAMETER. One or more parameter values passed to the method were invalid. \n5 - CIM_ERR_INVALID_CLASS. The specified Class does not exist. \n6 - CIM_ERR_NOT_FOUND. The requested object could not be found. \n7 - CIM_ERR_NOT_SUPPORTED. The requested operation is not supported. \n8 - CIM_ERR_CLASS_HAS_CHILDREN. Operation cannot be carried out on this class since it has instances. \n9 - CIM_ERR_CLASS_HAS_INSTANCES. Operation cannot be carried out on this class since it has instances. \n10 - CIM_ERR_INVALID_SUPERCLASS. Operation cannot be carried out since the specified superclass does not exist. \n11 - CIM_ERR_ALREADY_EXISTS. Operation cannot be carried out because an object already exists. \n12 - CIM_ERR_NO_SUCH_PROPERTY. The specified Property does not exist. \n13 - CIM_ERR_TYPE_MISMATCH. The value supplied is incompatible with the type. \n14 - CIM_ERR_QUERY_LANGUAGE_NOT_SUPPORTED. The query language is not recognized or supported. \n15 - CIM_ERR_INVALID_QUERY. The query is not valid for the specified query language. \n16 - CIM_ERR_METHOD_NOT_AVAILABLE. The extrinsic Method could not be executed. \n17 - CIM_ERR_METHOD_NOT_FOUND. The specified extrinsic Method does not exist. \n18 - CIM_ERR_UNEXPECTED_RESPONSE. The returned response to the asynchronous operation was not expected. \n19 - CIM_ERR_INVALID_RESPONSE_DESTINATION. The specified destination for the asynchronous response is not valid. \n20 - CIM_ERR_NAMESPACE_NOT_EMPTY. The specified Namespace is not empty.\n21 - CIM_ERR_INVALID_ENUMERATION_CONTEXT. The enumeration context supplied is not valid.\n22 - CIM_ERR_INVALID_OPERATION_TIMEOUT. The specified Namespace is not empty.\n23 - CIM_ERR_PULL_HAS_BEEN_ABANDONED. The specified Namespace is not empty.\n24 - CIM_ERR_PULL_CANNOT_BE_ABANDONED. The attempt to abandon a pull operation has failed.\n25 - CIM_ERR_FILTERED_ENUMERATION_NOT_SUPPORTED. Filtered Enumeratrions are not supported.\n26 - CIM_ERR_CONTINUATION_ON_ERROR_NOT_SUPPORTED. Continue on error is not supported.\n27 - CIM_ERR_SERVER_LIMITS_EXCEEDED. The WBEM Server limits have been exceeded (e.g. memory, connections, ...).\n28 - CIM_ERR_SERVER_IS_SHUTTING_DOWN. The WBEM Server is shutting down.\n29 - CIM_ERR_QUERY_FEATURE_NOT_SUPPORTED. The specified Query Feature is not supported.") : Amended ToSubclass,Values{"CIM_ERR_FAILED", "CIM_ERR_ACCESS_DENIED", "CIM_ERR_INVALID_NAMESPACE", "CIM_ERR_INVALID_PARAMETER", "CIM_ERR_INVALID_CLASS", "CIM_ERR_NOT_FOUND", "CIM_ERR_NOT_SUPPORTED", "CIM_ERR_CLASS_HAS_CHILDREN", "CIM_ERR_CLASS_HAS_INSTANCES", "CIM_ERR_INVALID_SUPERCLASS", "CIM_ERR_ALREADY_EXISTS", "CIM_ERR_NO_SUCH_PROPERTY", "CIM_ERR_TYPE_MISMATCH", "CIM_ERR_QUERY_LANGUAGE_NOT_SUPPORTED", "CIM_ERR_INVALID_QUERY", "CIM_ERR_METHOD_NOT_AVAILABLE", "CIM_ERR_METHOD_NOT_FOUND", "CIM_ERR_UNEXPECTED_RESPONSE", "CIM_ERR_INVALID_RESPONSE_DESTINATION", "CIM_ERR_NAMESPACE_NOT_EMPTY", "CIM_ERR_INVALID_ENUMERATION_CONTEXT", "CIM_ERR_INVALID_OPERATION_TIMEOUT", "CIM_ERR_PULL_HAS_BEEN_ABANDONED", "CIM_ERR_PULL_CANNOT_BE_ABANDONED", "CIM_ERR_FILTERED_ENUMERATION_NOT_SUPPORTED", "CIM_ERR_CONTINUATION_ON_ERROR_NOT_SUPPORTED", "CIM_ERR_SERVER_LIMITS_EXCEEDED", "CIM_ERR_SERVER_IS_SHUTTING_DOWN", "CIM_ERR_QUERY_FEATURE_NOT_SUPPORTED", "DMTF Reserved"} : Amended ToSubclass] uint32 CIMStatusCode;
+    [Description("A free-form string containing a human-readable description of CIMStatusCode. This description MAY extend, but MUST be consistent with, the definition of CIMStatusCode.") : Amended ToSubclass] string CIMStatusCodeDescription;
+};
+
+[Description("A Windows error object that encapsulates what is in CIM_Error as well as includes error code, errorCategory, errorMessage and errorType.") : Amended ToSubclass, AMENDMENT, LOCALE("MS_409")]
+class MSFT_WmiError : CIM_Error
+{
+    [Description("Error code.") : Amended ToSubclass] uint32 error_Code;
+    [Description("Error Category.") : Amended ToSubclass] uint16 error_Category;
+    [Description("Error Type.") : Amended ToSubclass] string error_Type;
+    [Description("Windows error message.") : Amended ToSubclass] string error_WindowsErrorMessage;
+};
+
+class VisualSVN_Error : __ExtendedStatus
+{
+};
+
+class VisualSVN_ExtendedError : VisualSVN_Error
+{
+    uint32 ProbableReason;
+    string Summary;
+    string Details;
+};
+
+[provider("VisualSVNWMIProvider"), dynamic, abstract]
+class VisualSVN_Account
+{
+};
+
+class VisualSVN_WindowsAccount : VisualSVN_Account
+{
+    [key] string SID;
+};
+
+[provider("VisualSVNWMIProvider"), dynamic, abstract]
+class VisualSVN_SubversionAccount : VisualSVN_Account
+{
+    [key] string Name;
+};
+
+[singleton]
+class VisualSVN_Everyone : VisualSVN_Account
+{
+    string Name;
+};
+
+instance of VisualSVN_Everyone
+{
+    Name="Everyone";
+};
+
+[provider("VisualSVNWMIProvider"), dynamic]
+class VisualSVN_User : VisualSVN_SubversionAccount
+{
+    [implemented, static] void Create([in] string Name, [in] string Password);
+    [implemented, static] void Delete([in] string Name);
+    [implemented] void SetPassword([in] string Password);
+};
+
+[provider("VisualSVNWMIProvider"), dynamic]
+class VisualSVN_Group : VisualSVN_SubversionAccount
+{
+    [implemented, static] void Create([in] string Name,
+                                      [in] VisualSVN_SubversionAccount ref Members[]);
+    [implemented, static] void Delete([in] string Name);
+    [implemented] void GetMembers([out] VisualSVN_SubversionAccount Members[]);
+    [implemented] void SetMembers([in] VisualSVN_SubversionAccount ref Members[]);
+};
+
+class VisualSVN_PermissionEntry
+{
+    VisualSVN_Account Account;
+
+    [Description ("0 - no access, 1 - read only, 2 - read/write"),
+     Values{"No Access", "Read Only", "Read Write"}] 
+    uint32 AccessLevel;
+};
+
+class VisualSVN_CertifcateInformation
+{
+    [Read] string IssuedTo;
+    [Read] string IssuedBy;
+    [Read] datetime ValidFrom;
+    [Read] datetime ValidTo;
+    [Read] string Organization;
+    [Read] string OrganizationUnit;
+    [Read] string CountryCode;
+    [Read] string State;
+    [Read] string City;
+    [Read] string Base64Certificate;
+};
+
+[provider("VisualSVNWMIProvider"), dynamic]
+class VisualSVN_Service
+{
+    [Key] string Name;
+
+    [
+        Read,
+        MappingStrings{"Win32API|Service Structures|SERVICE_STATUS|dwCurrentState"},
+        ValueMap{"Stopped", "Start Pending", "Stop Pending", "Running", "Continue Pending", "Pause Pending", "Paused", "Unknown"}
+    ]
+    uint32 ServiceState;
+
+    [
+        Read,
+        MappingStrings{"Win32API|Service Structures|SERVICE_STATUS|dwWin32ExitCode"}
+    ]
+    uint32 ExitCode;
+
+    [Read] string URL;
+
+    [Read] string ServerName;
+    [Read] boolean UseCustomServerName;
+    [Read] string CustomServerName; 
+    [Read] boolean IsDomainController;
+
+    [Read] string RepositoriesRoot;
+    [Read] boolean AdjustRepositoriesRootPermissions;
+
+    [Read] boolean UseSecureConnection;
+    [Read] uint16 UnsecurePort;
+    [Read] uint16 SecurePort;
+    [Read] boolean ListenAllIPAddresses;
+    [Read] string ListenIPAddressesArray[];
+
+    [Read] boolean AuthWindowsBasic;
+    [Read] boolean AuthWindowsIntegrated;
+
+    [Read] boolean AccessLoggingEnabled;
+    [Read] boolean OperationalLoggingEnabled;
+
+    [implemented] void StartService();
+    [implemented] void StopService();
+    [implemented] void RestartService();
+
+    [Description ("0 - subversion authentication, 1 - windows authentication"),
+     Values{"Subversion", "Windows"},
+     Read] uint32 AuthType;
+    [Read] boolean UseUPNFormat;
+
+    [Read] boolean RedirectFromLegacyWebInterface;
+
+    /* Since VisualSVN Server 3.5.0 */
+    [Read] string RepositoriesURLPrefix;
+
+    [implemented, Values{"Success", "DoesNotExists"}]
+    uint32 SetRepositoriesRoot([in] string RepositoriesRoot,
+                               [in] boolean AdjustPermissions,
+                               [in] boolean ForceCreate = false);
+
+    [implemented]
+    void SetServerName([in] boolean UseCustom, [in] string CustomServerName);
+    [implemented]
+    void SetNetworkOptions([in] uint16 Port,
+                   [in] boolean UseSecureConnection,
+                   [in] string ListenIPAddressesArray[]);
+    [implemented]
+    void SetAuthenticationOptions([in, Values{"Subversion", "Windows"}] uint32 AuthType,
+                 [in] boolean WindowsBasic,
+                 [in] boolean WindowsIntegrated,
+                 [in] boolean UseUPNFormat = false);
+
+    [implemented]
+    void SetLoggingOptions([in] boolean EnableAccessLogging,
+                           [in] boolean EnableOperationalLogging);
+
+    [implemented] VisualSVN_CertifcateInformation GetCertificateInformation();
+    [implemented] void ImportCertificate([in] string Base64Certificate);
+    [implemented,
+     Values{"Matched", "KeyMatched", "KeyConflict", "KeyMissed"}]
+                uint32 ValidateCertificate([in] string Base64Certificate);
+    [implemented] void CreateSelfSignedCertificate([in] string CommonName,
+                                                   [in] string AdditionalNames[],
+                                                   [in] string Organization,
+                                                   [in] string OrganizationUnit,
+                                                   [in] string CountryCode,
+                                                   [in] string State,
+                                                   [in] string City,
+                                                   [in] uint32 Days);
+    [implemented] string CreateCertificateRequest([in] string CommonName,
+                                                  [in] string AdditionalNames[],
+                                                  [in] string Organization,
+                                                  [in] string OrganizationUnit,
+                                                  [in] string CountryCode,
+                                                  [in] string State,
+                                                  [in] string City);
+
+    [implemented] void GetRepositorySupervisors([out] VisualSVN_WindowsAccount Supervisors[]);
+    [implemented] void SetRepositorySupervisors([in] VisualSVN_WindowsAccount Supervisors[]);
+    [implemented] void GetServerAdmins([out] VisualSVN_WindowsAccount Admins[]);
+    [implemented] void SetServerAdmins([in] VisualSVN_WindowsAccount Admins[]);
+
+    [implemented] void SetWebInterfaceOptions([in] boolean RedirectFromLegacyWebInterface);
+
+    [implemented] void SetRepositoriesURLPrefix([in] string RepositoriesURLPrefix);
+};
+
+[provider("VisualSVNWMIProvider"), dynamic]
+class VisualSVN_VdfsService
+{
+    [Key] string Name;
+
+    [
+        Read,
+        MappingStrings{"Win32API|Service Structures|SERVICE_STATUS|dwCurrentState"},
+        ValueMap{"Stopped", "Start Pending", "Stop Pending", "Running", "Continue Pending", "Pause Pending", "Paused", "Unknown"}
+    ]
+    uint32 ServiceState;
+
+    [
+        Read,
+        MappingStrings{"Win32API|Service Structures|SERVICE_STATUS|dwWin32ExitCode"}
+    ]
+    uint32 ExitCode;
+
+    [
+        Read,
+        MappingStrings{"Win32API|Service Structures|QUERY_SERVICE_CONFIG|dwStartType"},
+        ValueMap{"Boot Start", "System Start", "Auto Start", "Demand Start", "Disabled"}
+    ]
+    uint32 StartMode;
+
+    [implemented] void StartService();
+    [implemented] void StopService();
+
+    [implemented] void ChangeStartMode([in] uint32 StartMode);
+
+    [implemented] void GetReplicationPartners([out] VisualSVN_WindowsAccount Partners[]);
+    [implemented] void SetReplicationPartners([in] VisualSVN_WindowsAccount Partners[]);
+};
+
+[provider("VisualSVNWMIProvider"), dynamic, abstract]
+class VisualSVN_RepositoryEntry
+{
+    [Description ("'repo' for repository and entry"), key]
+    string RepositoryName;
+    [Description ("'/' for repo root, '/folder/file' for entry"), key]
+    string Path;
+
+    [Description ("This property is true, if object has only inherited permissions.")]
+    boolean InheritedOnlyPermissions;
+
+    string Name;
+    [Description ("null for repo root")]
+    string ParentPath;
+    string URL;
+
+    [Description ("0 - File, 1 - Folder"), Values{"File", "Folder"}]
+    uint32 Kind;
+};
+
+[provider("VisualSVNWMIProvider"), dynamic]
+class VisualSVN_Repository
+{
+    [Description ("Repository name"), key]
+    string Name;
+
+    string Path;
+
+    string URL;
+
+    [Description ("Number of revisions stored in the repository.")]
+    uint32 TotalRevisions;
+
+    [Description ("This property is true, if object has only inherited permissions.")]
+    boolean InheritedOnlyPermissions;
+
+    [Description ("Type of repository: 0 - FSFS, 1 - VDFS (master), 2 - VDFS (slave)"),
+     Values{"FSFS", "VDFS (master)", "VDFS (slave)"}]
+    uint32 Type;
+
+    string MasterServer;
+    string MasterRepository;
+
+    [Description ("Repository filesystem format number.")]
+    uint32 FormatNumber;
+
+    [Description ("Repository UUID.")]
+    string UUID;
+
+    [Description ("Shard size. 0 for non-sharded repositories.")]
+    uint32 ShardSize;
+    [Description ("Number of total revision shards in repository.")]
+    uint32 TotalShards;
+    [Description ("Number of packed shards in repository.")]
+    uint32 PackedShards;
+
+    [Description ("True if repository uses log addressing mode.")]
+    boolean LogAddressing;
+
+    [Description ("True if repository is suspended.")]
+    boolean Suspended;
+
+    [static, implemented] void Create([in] string Name);
+    [static, implemented] void CreateVdfsMaster([in] string Name);
+    [static, implemented] void CreateVdfsSlave([in] string Name,
+                                               [in] string MasterServer,
+                                               [in] string MasterRepository);
+    [static, implemented] void ImportVdfsMaster([in] string Name,
+                                                [in] string ImportPath,
+                                                [in] boolean ImportPermissions = true,
+                                                [in] boolean ImportDelegation = true,
+                                                [in] boolean ImportHooks = true);
+    [static, implemented] void ImportRepository([in] string Name,
+                                                [in] string ImportPath,
+                                                [Description ("Import mode: 0 - From live repository, 1 - From dump file"),
+                                                 Values{"FromLiveRepository", "FromDumpFile"}, in] uint32 ImportMode = 0);
+
+    [static, implemented, Values{"FSFS", "VDFS (master)", "VDFS (slave)"}]
+    uint32 GetImportSourceType([in] string Path);
+
+    [static, implemented] void TestVdfsConnection([in] string ServerName,
+                                                  [in] string RepositoryName,
+                                                  [out] uint32 TotalRevisions);
+    [static, implemented] void Rename([in] string OldName, [in] string NewName);
+    [static, implemented] void Delete([in] string Name);
+
+    [implemented] void GetChildren([in] string Path, [out] VisualSVN_RepositoryEntry Children[]);
+    [implemented] void Upgrade();
+
+    [implemented] void CreateFolders([in] string Folders[], [in] string Message);
+    [implemented] void DeleteFolders([in] string Folders[], [in] string Message);
+
+    [implemented] void GetSize([out] uint64 Size,
+                               [out] uint64 SizeOnDisk,
+                               [out] uint64 TotalFiles,
+                               [out] uint64 TotalFolders);
+
+    [Description ("Repository capabilities. Supported capabilites: 'mergeinfo'"), implemented] 
+    boolean HasCapability([in] string Capability);
+
+    [implemented] boolean GetHook([Values{"PostCommit", "PostLock", "PostPropChange", "PostUnlock",
+                                          "PreCommit", "PreLock", "PrePropChnage", "PreUnlock",
+                                          "StartCommit"}, in] uint32 Kind, [out] string Hook);
+
+    [implemented] void SetHook([Values{"PostCommit", "PostLock", "PostPropChange", "PostUnlock",
+                                       "PreCommit", "PreLock", "PrePropChnage", "PreUnlock",
+                                       "StartCommit"}, in] uint32 Kind, [in] string Hook);
+
+    [implemented] void DeleteHook([Values{"PostCommit", "PostLock", "PostPropChange", "PostUnlock",
+                                          "PreCommit", "PreLock", "PrePropChnage", "PreUnlock",
+                                          "StartCommit"}, in] uint32 Kind);
+
+    [static, implemented] void GetGlobalSecurity([out] VisualSVN_PermissionEntry Permissions[]);
+    [static, implemented] void SetGlobalSecurity([in] VisualSVN_PermissionEntry Permissions[]);
+
+    [implemented] void GetSecurity([in] string Path,
+                                   [out] VisualSVN_PermissionEntry Permissions[]);
+    [implemented] void SetSecurity([in] string Path,
+                                   [in] VisualSVN_PermissionEntry Permissions[],
+                                   [in] boolean ResetChildren = false);
+
+    [implemented] void GetDelegationSettings([out] boolean Enabled,
+                                             [out] VisualSVN_WindowsAccount Managers[]);
+    [implemented] void SetDelegationSettings([in] boolean Enabled,
+                                             [in] VisualSVN_WindowsAccount Managers[]);
+
+    [implemented] void GetReplicationSettings([out] boolean Enabled,
+                                              [out] VisualSVN_WindowsAccount Replicators[]);
+    [implemented] void SetReplicationSettings([in] boolean Enabled,
+                                              [in] VisualSVN_WindowsAccount Replicators[]);
+
+    [implemented, Values{"Ok", "Services Running", "Transactional NTFS not supported"}]
+    uint32 ConvertToVdfs();
+
+    [implemented, Values{"Ok", "Services Running", "Transactional NTFS not supported"}]
+    uint32 ConvertToFsfs();
+
+    [implemented]
+    void PromoteToVdfsMaster();
+
+    [implemented]
+    void CheckReplicationConsistency();
+
+    [implemented]
+    void ExportReplicationSeed([in] string DestinationPath);
+
+    [implemented]
+    void ChangeMasterTo([in] string MasterServer, [in] string MasterRepository);
+};
+
+[provider("VisualSVNWMIProvider")]
+class VisualSVN_Activity
+{
+    [static, implemented] void Cancel([in] string Id);
+};
+
+[provider("VisualSVNWMIProvider"), dynamic]
+class VisualSVN_SecurityDescriptor
+{
+    [key] object ref AssociatedObject;
+    VisualSVN_PermissionEntry Permissions[];
+};
+
+[Singleton, provider("VisualSVNWMIProvider"), dynamic]
+class VisualSVN_VersionInfo
+{
+    string Version;
+    string SubversionVersion;
+    string ApacheVersion;
+};
+
+[Singleton, provider("VisualSVNWMIProvider"), dynamic]
+class VisualSVN_LicenseInfo
+{
+    [Read,
+     Values{"Valid", "Invalid", "Expired", "NotStarted", "NoLicense", "MaintenanceExpired" }] 
+        uint32 Status;
+
+    [Description( "Possible values are: 'Enterprise'"),
+     Read] string Type;
+    [Read] string LicensedTo;
+
+    [Description("True if license has limited time."), Read]
+    boolean TimeLimited;
+
+    [Description( "If license lifetime is unlimited the field is null"),
+     Read] datetime StartTime;
+    [Description( "If license lifetime is unlimited the field is null"),
+     Read] datetime EndTime;
+
+    [Description( "License remaining time in minutes. If license lifetime is unlimited the field is null"),
+     Read] uint32 RemainingTime;
+
+    [Description( "License maintenance period end time. If maintenance period is not restricted the field is null"),
+     Read] datetime MaintenanceEndTime;
+
+    [Description("License ID. Available starting from VisualSVN Server 3.0"), Read]
+    string LicenseID;
+
+    [implemented, static,
+     Values{"Valid", "Invalid", "Expired", "NotStarted" }]
+        uint32 UpdateLicense([in] string LicenseKey);
+
+    [implemented, static]
+    VisualSVN_LicenseInfo ParseLicense([in] string LicenseKey);
+};
+
+[ClassVersion("1.0.0.0"), provider("VisualSVNWMIProvider"), dynamic]
+class PS_SvnRepository
+{
+    [key] string Name;
+    string Path;
+    string URL;
+    string UUID;
+    uint32 Revisions;
+    [ValueMap{"0", "1", "2"}, Values{"Fsfs", "VdfsMaster", "VdfsSlave"}]
+    uint32 Type;
+    string MasterServer;
+    string MasterRepository;
+
+    uint32 FormatNumber;
+    uint32 ShardSize;
+    uint32 TotalShards;
+    uint32 PackedShards;
+    boolean LogAddressing;
+    boolean Suspended;
+
+    [static, implemented] void Create([in] string Name,
+                                      [in, ValueMap{"0", "1", "2"}, Values{"Fsfs", "VdfsMaster", "VdfsSlave"}] uint32 Type,
+                                      [in] string MasterServer,
+                                      [in] string MasterRepository,
+                                      [out] PS_SvnRepository CmdletOutput);
+
+    [static, implemented] void Import([in] string DestinationName,
+                                      [in] string Path,
+                                      [out] PS_SvnRepository CmdletOutput);
+
+    [implemented] void Remove();
+    [implemented] void Rename([in] string NewName,
+                              [in] boolean PassThru = false,
+                              [out] PS_SvnRepository CmdletOutput);
+    [implemented] void GetReplication([out] PS_SvnRepositoryReplication CmdletOutput);
+    [implemented] void SetReplication([in] boolean Enabled,
+                                      [in] string Replicators[]);
+
+    [implemented] void Test([out] PS_SvnRepositoryTestResult CmdletOutput);
+
+    [implemented] void Convert([in, ValueMap{"0", "1", "2"}, Values{"Fsfs", "VdfsMaster", "VdfsSlave"}] uint32 TargetType,
+                               [in] boolean PassThru = false,
+                               [out] PS_SvnRepository CmdletOutput);
+    [implemented] void Sync([in] boolean PassThru = false,
+                            [out] PS_SvnRepository CmdletOutput);
+
+    [implemented] void Set([in] string MasterServer,
+                           [in] string MasterRepository,
+                           [in] boolean PassThru = false,
+                           [out] PS_SvnRepository CmdletOutput);
+
+    [implemented] void Suspend([in] boolean PassThru = false,
+                               [out] PS_SvnRepository CmdletOutput);
+    [implemented] void Resume([in] boolean PassThru = false,
+                              [out] PS_SvnRepository CmdletOutput);
+
+    [implemented] void Switch([in, ValueMap{"0", "1"}, Values{"Master", "Slave"}] uint32 Role,
+                              [in] string MasterServer,
+                              [in] string MasterRepository,
+                              [in] boolean PassThru = false,
+                              [out] PS_SvnRepository CmdletOutput);
+
+    [implemented] void Measure([out] PS_SvnRepositoryStats CmdletOutput);
+};
+
+[provider("VisualSVNWMIProvider"), dynamic]
+class PS_SvnRepositoryReplication
+{
+    string Name;
+    boolean Enabled;
+    string Replicators[];
+};
+
+[provider("VisualSVNWMIProvider"), dynamic]
+class PS_SvnRepositoryTestResult
+{
+    string Name;
+    [ValueMap{"0", "1"}, Values{"OK", "Error"}]
+    uint32 Summary;
+    string Details;
+};
+
+class PS_SvnRepositoryStats
+{
+    string Name;
+    uint32 Revisions;
+    uint64 Size;
+    uint64 SizeOnDisk;
+    uint64 FilesOnDisk;
+    uint64 FoldersOnDisk;
+};
+
+[ClassVersion("1.0.0.0"), provider("VisualSVNWMIProvider"), dynamic]
+class PS_SvnRepositoryItem
+{
+    [key] string Repository;
+    [key] string Path;
+    [ValueMap{"0", "1"}, Values{"File", "Folder"}] uint32 Type;
+
+    string Name;
+    string Folder;
+    string URL;
+
+    [implemented, static] void CreateByRepositoryName([in] string Repository,
+                                                      [in] string Path[],
+                                                      [in, ValueMap{"0", "1"}, Values{"File", "Folder"}] uint32 Type,
+                                                      [in] string CommitMessage,
+                                                      [out] PS_SvnRepositoryItem CmdletOutput[]);
+    [implemented, static] void CreateByRepositoryObject([in] PS_SvnRepository RepositoryObject,
+                                                        [in] string Path[],
+                                                        [in, ValueMap{"0", "1"}, Values{"File", "Folder"}] uint32 Type,
+                                                        [in] string CommitMessage,
+                                                        [out] PS_SvnRepositoryItem CmdletOutput[]);
+
+    [implemented, static] void RemoveByRepositoryName([in] string Repository,
+                                                      [in] string Path[],
+                                                      [in] string CommitMessage);
+    [implemented, static] void RemoveByRepositoryObject([in] PS_SvnRepository RepositoryObject,
+                                                        [in] string Path[],
+                                                        [in] string CommitMessage);
+};
+
+[ClassVersion("1.0.0.0"), provider("VisualSVNWMIProvider"), dynamic]
+class PS_SvnRepositoryHook
+{
+    [key] string Repository;
+    [key, Values{"PostCommit", "PostLock", "PostRevpropChange", "PostUnlock",
+                 "PreCommit", "PreLock", "PreRevpropChange", "PreUnlock",
+                 "StartCommit"}] string TypeName;
+
+    [ValueMap{"0", "1", "2", "3", "4", "5", "6", "7", "8"},
+     Values{"PostCommit", "PostLock", "PostRevpropChange", "PostUnlock",
+            "PreCommit", "PreLock", "PreRevpropChange", "PreUnlock",
+            "StartCommit"}] uint32 Type;
+
+    string Content;
+    string Path;
+
+    [static, implemented] void AddByRepositoryName([in] string Repository,
+                                                   [in, ValueMap{"0", "1", "2", "3", "4", "5", "6", "7", "8"},
+                                                    Values{"PostCommit", "PostLock", "PostRevpropChange", "PostUnlock",
+                                                           "PreCommit", "PreLock", "PreRevpropChange", "PreUnlock",
+                                                           "StartCommit"}] uint32 Type,
+                                                   [in] string Content,
+                                                   [in] boolean Force = false,
+                                                   [out] PS_SvnRepositoryHook CmdletOutput);
+    [static, implemented] void AddByRepositoryObject([in] PS_SvnRepository RepositoryObject,
+                                                     [in, ValueMap{"0", "1", "2", "3", "4", "5", "6", "7", "8"},
+                                                      Values{"PostCommit", "PostLock", "PostRevpropChange", "PostUnlock",
+                                                             "PreCommit", "PreLock", "PreRevpropChange", "PreUnlock",
+                                                             "StartCommit"}] uint32 Type,
+                                                     [in] string Content,
+                                                     [in] boolean Force = false,
+                                                     [out] PS_SvnRepositoryHook CmdletOutput);
+    [static, implemented] void AddByHook([in] PS_SvnRepositoryHook Hook,
+                                         [in] boolean Force = false,
+                                         [out] PS_SvnRepositoryHook CmdletOutput);
+
+    [implemented] void Remove();
+    [implemented] void Set([in] string Content,
+                           [in] boolean PassThru = false,
+                           [out] PS_SvnRepositoryHook CmdletOutput);
+};
+
+[ClassVersion("1.0.0.0"), provider("VisualSVNWMIProvider"), dynamic]
+class PS_SvnAccessRule
+{
+    [key] string Repository;
+    [key] string Path;
+    [key, read] string AccountName;
+    [key, read] string AccountId;
+    [ValueMap{"0", "1", "2"}, Values{"NoAccess", "ReadOnly", "ReadWrite"}] uint32 Access;
+    boolean Global;
+
+    [static, implemented] void AddByRepositoryName([in] string Repository,
+                                                   [in] string Path,
+                                                   [in] string AccountName,
+                                                   [in] string AccountId,
+                                                   [in, ValueMap{"0", "1", "2"}, Values{"NoAccess", "ReadOnly", "ReadWrite"}] uint32 Access,
+                                                   [in] boolean Force = false,
+                                                   [out] PS_SvnAccessRule CmdletOutput);
+    [static, implemented] void AddByRepositoryObject([in] PS_SvnRepository RepositoryObject,
+                                                     [in] string Path,
+                                                     [in] string AccountName,
+                                                     [in] string AccountId,
+                                                     [in, ValueMap{"0", "1", "2"}, Values{"NoAccess", "ReadOnly", "ReadWrite"}] uint32 Access,
+                                                     [in] boolean Force = false,
+                                                     [out] PS_SvnAccessRule CmdletOutput);
+    [static, implemented] void AddByGlobal([in] string AccountName,
+                                           [in] string AccountId,
+                                           [in, ValueMap{"0", "1", "2"}, Values{"NoAccess", "ReadOnly", "ReadWrite"}] uint32 Access,
+                                           [in] boolean Force = false,
+                                           [out] PS_SvnAccessRule CmdletOutput);
+    [static, implemented] void AddByRule([in] PS_SvnAccessRule Rule,
+                                         [in] boolean Force = false,
+                                         [out] PS_SvnAccessRule CmdletOutput);
+
+    [implemented] void Remove();
+    [implemented] void Set([in, ValueMap{"0", "1", "2"}, Values{"NoAccess", "ReadOnly", "ReadWrite"}] uint32 Access,
+                           [in] boolean PassThru = false,
+                           [out] PS_SvnAccessRule CmdletOutput);
+
+    [static, implemented] void SelectByRepositoryName([in] string Repository,
+                                                      [in] string Path,
+                                                      [out] PS_SvnAccessRule CmdletOutput[]);
+    [static, implemented] void SelectByRepositoryObject([in] PS_SvnRepository RepositoryObject,
+                                                        [in] string Path,
+                                                        [out] PS_SvnAccessRule CmdletOutput[]);
+};
+
+[ClassVersion("1.0.0.0"), provider("VisualSVNWMIProvider"), dynamic]
+class PS_SvnServerConfiguration
+{
+    string ServerName;
+    string RepositoriesRoot;
+    string RepositoriesURLPrefix;
+    string ListeningIPAddress[];
+    uint16 ListenPort;
+    boolean EnableSSL;
+    [ValueMap{"0", "1"}, Values{"Subversion", "Windows"}] uint32 AuthenticationMode;
+    boolean EnableBasicAuthentication;
+    boolean EnableIntegratedAuthentication;
+    boolean RedirectFromLegacyWebInterface;
+    boolean EnableOperationalLogging;
+    boolean EnableAccessLogging;
+
+    [static, implemented] void Get([out] PS_SvnServerConfiguration CmdletOutput);
+    [static, implemented] void Set([in] string ServerName,
+                                   [in] string RepositoriesRoot,
+                                   [in] string RepositoriesURLPrefix,
+                                   [in] uint16 ListenPort,
+                                   [in] string ListeningIPAddress[],
+                                   [in] boolean EnableSSL,
+                                   [in, ValueMap{"0", "1"}, Values{"Subversion", "Windows"}] uint32 AuthenticationMode,
+                                   [in] boolean EnableBasicAuthentication,
+                                   [in] boolean EnableIntegratedAuthentication,
+                                   [in] boolean RedirectFromLegacyWebInterface,
+                                   [in] boolean EnableOperationalLogging,
+                                   [in] boolean EnableAccessLogging,
+                                   [in] boolean PassThru = false,
+                                   [out] PS_SvnServerConfiguration CmdletOutput);
+};
+
+/****************************************
+ * VisualSVN RepoManager WMI Provider   *
+ ***************************************/
+
+[guid("{8047134F-BFCF-4360-AADB-A73246275359}")
+ ,NamespaceSecuritySDDL("D:(A;CI;CCDCWP;;;S-1-5-21-1336596058-638747241-148348329-1005)")]
+instance of __NameSpace
+{
+    Name = "RepoCfg";
+};
+
+#pragma namespace ("\\\\.\\root\\VisualSVN\\RepoCfg")
+
+instance of __Win32Provider as $vrepocfgprov
+{
+    Name    = "vrepocfgprov";
+    ClsId   = "{A1B3BABA-0286-403C-910D-4E3ADF591E2B}";
+    HostingModel = "LocalServiceHost:VisualSVN-3.5.4";
+    ImpersonationLevel = 1;
+    PerUserInitialization = TRUE;
+    SecurityDescriptor = "O:BAG:BAD:(A;;0x1;;;SU)";
+    Version = 1;
+};
+
+instance of __InstanceProviderRegistration
+{
+    Provider = $vrepocfgprov;
+
+    SupportsPut = FALSE; 
+    SupportsGet = TRUE; 
+    SupportsDelete = FALSE; 
+    SupportsEnumeration = FALSE; 
+};
+
+instance of __MethodProviderRegistration
+{
+    Provider = $vrepocfgprov;
+};
+
+class VisualSVN_DirEntry
+{
+    [Description ("Empty for ThisNode.")]
+    string Name;
+
+    [Description ("This property is true, if object has only inherited permissions.")]
+    boolean InheritedOnlyPermissions;
+
+    [Description ("This property is true, if object subtree contains at least one object with explicit permissions.")]
+    boolean SubtreePermissions;
+
+    [Description ("0 - None, 1 - File, 2 - Folder"), Values{"None", "File", "Folder"}]
+    uint32 Kind;
+};
+
+class VisualSVN_AccessRule
+{
+    string SID;
+
+    [Description ("0 - no access, 1 - read only, 2 - read/write"),
+     Values{"No Access", "Read Only", "Read Write"}] 
+    uint32 AccessLevel;
+
+    boolean Inherited;
+
+    [Description("Path from this access rule is inherited. Empty string if access rule is not inherited.")]
+    string InheritedFrom;
+};
+
+class VisualSVN_SecurityDescriptor
+{
+    VisualSVN_AccessRule AccessList[];
+};
+
+[provider("vrepocfgprov"), dynamic]
+class VisualSVN_Repository
+{
+    [key] string Name;
+    string URL;
+    /* Since VisualSVN Server 3.5.0 */
+    string RootURLPath;
+    uint32 Schema = 2;
+
+    [implemented] void GetDir([in] string Path,
+                              [out] VisualSVN_DirEntry ThisNode,
+                              [out] VisualSVN_DirEntry Children[]);
+
+    [implemented] void GetSecurityDescriptor([in] string Path,
+                                             [out] VisualSVN_SecurityDescriptor SecurityDescriptor);
+    [implemented] void SetSecurityDescriptor([in] string Path,
+                                             [in] VisualSVN_SecurityDescriptor SecurityDescriptor);
+
+    /* Since VisualSVN Server 3.5.0 */
+    [static, implemented] VisualSVN_Repository GetRepositoryByURLPath([in] string URLPath);
+};
